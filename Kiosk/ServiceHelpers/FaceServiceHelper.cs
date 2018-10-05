@@ -81,6 +81,36 @@ namespace ServiceHelpers
             }
         }
 
+        private static string apiKeyCustomRegion;
+        public static string ApiKeyCustomRegion
+        {
+            get { return apiKeyCustomRegion; }
+            set
+            {
+                var changed = apiKeyCustomRegion != value;
+                apiKeyCustomRegion = value;
+                if (changed)
+                {
+                    InitializeFaceServiceClient();
+                }
+            }
+        }
+
+        private static string apiKeyCustomProtocol;
+        public static string ApiKeyCustomProtocol
+        {
+            get { return apiKeyCustomProtocol; }
+            set
+            {
+                var changed = apiKeyCustomProtocol != value;
+                apiKeyCustomProtocol = value;
+                if (changed)
+                {
+                    InitializeFaceServiceClient();
+                }
+            }
+        }
+
         static FaceServiceHelper()
         {
             InitializeFaceServiceClient();
@@ -88,9 +118,20 @@ namespace ServiceHelpers
 
         private static void InitializeFaceServiceClient()
         {
-            faceClient = ApiKeyRegion != null ?
-                new FaceServiceClient(ApiKey, string.Format("https://{0}.api.cognitive.microsoft.com/face/v1.0", ApiKeyRegion)) :
-                new FaceServiceClient(ApiKey);
+            switch (ApiKeyRegion)
+            {
+                case "custom":
+                    faceClient = ApiKeyCustomProtocol != null ?
+                        new FaceServiceClient(ApiKey, string.Format("{0}://{1}/face/v1.0", ApiKeyCustomProtocol, ApiKeyCustomRegion)) :
+                        new FaceServiceClient(ApiKey, string.Format("http://{0}/face/v1.0", ApiKeyCustomRegion)); // without a protocol specified we default to http
+                    break;
+
+                default:
+                    faceClient = ApiKeyRegion != null ?
+                        new FaceServiceClient(ApiKey, string.Format("https://{0}.api.cognitive.microsoft.com/face/v1.0", ApiKeyRegion)) :
+                        new FaceServiceClient(ApiKey);
+                    break;
+            }
         }
 
         private static async Task<TResponse> RunTaskWithAutoRetryOnQuotaLimitExceededError<TResponse>(Func<Task<TResponse>> action)

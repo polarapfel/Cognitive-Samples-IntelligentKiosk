@@ -55,6 +55,15 @@
 
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Header="Custom Face API protocol" ItemsSource="{Binding AvailableApiProtocols}" SelectedItem="{Binding FaceApiKeyProtocol, Mode=TwoWay}"/>
+                        <TextBox Grid.Column="1" Margin="10,0,6,0" Header="Custom Face API endpoint location - choose Region 'custom' and set FQHN here" Text="{Binding FaceApiKeyCustomRegion, Mode=TwoWay}" />
+                    </Grid>
+                    
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>

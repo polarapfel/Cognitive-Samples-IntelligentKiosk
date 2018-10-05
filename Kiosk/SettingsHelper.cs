@@ -127,6 +127,18 @@ namespace IntelligentKioskSample
                 this.FaceApiKeyRegion = value.ToString();
             }
 
+            value = ApplicationData.Current.RoamingSettings.Values["FaceApiKeyCustomRegion"];
+            if (value != null)
+            {
+                this.FaceApiKeyCustomRegion = value.ToString();
+            }
+
+            value = ApplicationData.Current.RoamingSettings.Values["FaceApiKeyProtocol"];
+            if (value != null)
+            {
+                this.FaceApiKeyProtocol = value.ToString();
+            }
+
             value = ApplicationData.Current.RoamingSettings.Values["VisionApiKey"];
             if (value != null)
             {
@@ -253,6 +265,28 @@ namespace IntelligentKioskSample
             {
                 this.faceApiKeyRegion = value;
                 this.OnSettingChanged("FaceApiKeyRegion", value);
+            }
+        }
+
+        private string faceApiKeyProtocol = "http";
+        public string FaceApiKeyProtocol
+        {
+            get { return this.faceApiKeyProtocol; }
+            set
+            {
+                this.faceApiKeyProtocol = value;
+                this.OnSettingChanged("FaceApiKeyProtocol", value);
+            }
+        }
+
+        private string faceApiKeyCustomRegion = "localhost:5000";
+        public string FaceApiKeyCustomRegion
+        {
+            get { return this.faceApiKeyCustomRegion; }
+            set
+            {
+                this.faceApiKeyCustomRegion = value;
+                this.OnSettingChanged("FaceApiKeyCustomRegion", value);
             }
         }
 
@@ -417,7 +451,20 @@ namespace IntelligentKioskSample
                     "eastasia",
                     "japaneast",
                     "australiaeast",
-                    "brazilsouth"
+                    "brazilsouth",
+                    "custom"
+                };
+            }
+        }
+
+        public string[] AvailableApiProtocols
+        {
+            get
+            {
+                return new string[]
+                {
+                    "http",
+                    "https"
                 };
             }
         }

@@ -87,6 +87,8 @@ namespace IntelligentKioskSample
                 {
                     FaceServiceHelper.ApiKey = SettingsHelper.Instance.FaceApiKey;
                     FaceServiceHelper.ApiKeyRegion = SettingsHelper.Instance.FaceApiKeyRegion;
+                    FaceServiceHelper.ApiKeyCustomRegion = SettingsHelper.Instance.FaceApiKeyCustomRegion;
+                    FaceServiceHelper.ApiKeyCustomProtocol = SettingsHelper.Instance.FaceApiKeyProtocol;
                     VisionServiceHelper.ApiKey = SettingsHelper.Instance.VisionApiKey;
                     VisionServiceHelper.ApiKeyRegion = SettingsHelper.Instance.VisionApiKeyRegion;
                     BingSearchHelper.SearchApiKey = SettingsHelper.Instance.BingSearchApiKey;
