@@ -31,7 +31,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // 
 
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using IntelligentKioskSample.Controls;
 using System;
 using System.Threading.Tasks;

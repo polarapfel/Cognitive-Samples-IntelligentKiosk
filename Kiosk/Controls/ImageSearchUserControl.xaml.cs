@@ -32,7 +32,7 @@
 // 
 
 using Microsoft.ProjectOxford.Face.Contract;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -32,7 +32,7 @@
 // 
 
 using Microsoft.ProjectOxford.Common.Contract;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 

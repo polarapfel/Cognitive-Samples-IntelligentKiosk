@@ -33,7 +33,7 @@
 
 using Microsoft.ProjectOxford.Face.Contract;
 using Newtonsoft.Json;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

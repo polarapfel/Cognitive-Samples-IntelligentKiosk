@@ -35,7 +35,7 @@ using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

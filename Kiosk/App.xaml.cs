@@ -41,7 +41,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace IntelligentKioskSample
 {
-    using ServiceHelpers;
+    using ServiceHelpersStandard;
     using System.Diagnostics;
     using Views;
     using Windows.Data.Xml.Dom;

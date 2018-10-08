@@ -11,7 +11,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -23,10 +23,13 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>AFA97E8E34493A24325844C55BC66D56D9F3595C</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>08A6AF5F7183045BB48A004F105D1858E961460E</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>IntelligentKioskSample_TemporaryKey.pfx</PackageCertificateKeyFile>
     <ApplicationInsightsResourceId />
     <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -183,7 +186,6 @@
     <Compile Include="Views\CustomVision\CustomVisionExplorer.xaml.cs">
       <DependentUpon>CustomVisionExplorer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomVision\CustomVisionServiceHelper.cs" />
     <Compile Include="Views\CustomVision\CustomVisionSetup.xaml.cs">
       <DependentUpon>CustomVisionSetup.xaml</DependentUpon>
     </Compile>
@@ -459,13 +461,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ServiceHelpersStandard\ServiceHelpersStandard.csproj">
+      <Project>{178b547d-08bf-479e-b3fe-d631f6643250}</Project>
+      <Name>ServiceHelpersStandard</Name>
+    </ProjectReference>
     <ProjectReference Include="KioskRuntimeComponent\KioskRuntimeComponent.csproj">
       <Project>{fc5a0250-b742-40a8-82ca-bec2df66982f}</Project>
       <Name>KioskRuntimeComponent</Name>
-    </ProjectReference>
-    <ProjectReference Include="ServiceHelpers\ServiceHelpers.csproj">
-      <Project>{5d9320af-a9e4-48e3-89bc-9f7f0954b298}</Project>
-      <Name>ServiceHelpers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -474,6 +476,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training">
       <Version>0.12.0-preview</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.Face">
+      <Version>2.2.0-preview</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.0-preview1-26926-04</Version>

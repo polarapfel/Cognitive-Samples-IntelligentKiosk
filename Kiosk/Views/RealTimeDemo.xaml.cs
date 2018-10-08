@@ -34,7 +34,7 @@
 using IntelligentKioskSample.Controls;
 using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face.Contract;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System;
 using System.Collections.Generic;
 using System.Linq;

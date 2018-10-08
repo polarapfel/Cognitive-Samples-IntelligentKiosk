@@ -34,7 +34,7 @@
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 using Microsoft.Rest;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System;
 using System.Collections.Generic;
 using System.IO;

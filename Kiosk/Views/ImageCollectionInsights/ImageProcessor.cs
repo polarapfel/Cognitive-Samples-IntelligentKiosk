@@ -32,7 +32,7 @@
 // 
 
 using Microsoft.ProjectOxford.Vision;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System;
 using System.Collections.Generic;
 using System.IO;

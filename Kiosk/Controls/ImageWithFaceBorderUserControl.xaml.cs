@@ -41,7 +41,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using System.Collections.Generic;
 using System.IO;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using Newtonsoft.Json.Linq;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236

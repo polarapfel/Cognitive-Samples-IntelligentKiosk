@@ -2,7 +2,7 @@
 using IntelligentKioskSample.MallKioskPageConfig;
 using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face.Contract;
-using ServiceHelpers;
+using ServiceHelpersStandard;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
