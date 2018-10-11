@@ -37,6 +37,7 @@ using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -89,4 +90,25 @@ namespace IntelligentKioskSample.Views
             SettingsHelper.Instance.RestoreMallKioskSettingsToDefaultFile();
         }
     }
+
+    public class CustomRegionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value == null || !value.ToString().Equals("custom"))
+            {
+                return Visibility.Collapsed;
+            }
+            else
+            {
+                return Visibility.Visible;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return Convert(value, targetType, parameter, language);
+        }
+    }
+
 }
