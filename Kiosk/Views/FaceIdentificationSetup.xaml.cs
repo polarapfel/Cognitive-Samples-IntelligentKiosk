@@ -56,8 +56,8 @@ namespace IntelligentKioskSample.Views
     {
         private bool needsTraining = false;
 
-        public ObservableCollection<PersonGroup> PersonGroups { get; set; } = new ObservableCollection<PersonGroup>();
-        public PersonGroup CurrentPersonGroup { get; set; }
+        public ObservableCollection<LargePersonGroup> PersonGroups { get; set; } = new ObservableCollection<LargePersonGroup>();
+        public LargePersonGroup CurrentPersonGroup { get; set; }
         public ObservableCollection<Person> PersonsInCurrentGroup { get; set; } = new ObservableCollection<Person>();
         public ObservableCollection<PersistedFace> SelectedPersonFaces { get; set; } = new ObservableCollection<PersistedFace>();
         public Person SelectedPerson { get; set; }
@@ -71,7 +71,7 @@ namespace IntelligentKioskSample.Views
         {
             this.DataContext = this;
 
-            await this.LoadPersonGroupsFromService();
+            await this.LoadLargePersonGroupsFromService();
 
             base.OnNavigatedTo(e);
         }
@@ -89,14 +89,14 @@ namespace IntelligentKioskSample.Views
 
         #region Group management
 
-        private async Task LoadPersonGroupsFromService()
+        private async Task LoadLargePersonGroupsFromService()
         {
             this.progressControl.IsActive = true;
 
             try
             {
                 this.PersonGroups.Clear();
-                IEnumerable<PersonGroup> personGroups = await FaceServiceHelper.ListPersonGroupsAsync(SettingsHelper.Instance.WorkspaceKey);
+                IEnumerable<LargePersonGroup> personGroups = await FaceServiceHelper.ListLargePersonGroupsAsync(SettingsHelper.Instance.WorkspaceKey);
                 this.PersonGroups.AddRange(personGroups.OrderBy(pg => pg.Name));
 
                 if (this.personGroupsListView.Items.Any())
@@ -122,8 +122,8 @@ namespace IntelligentKioskSample.Views
                 }
 
                 Guid personGroupGuid = Guid.NewGuid();
-                await FaceServiceHelper.CreatePersonGroupAsync(personGroupGuid.ToString(), this.personGroupNameTextBox.Text, SettingsHelper.Instance.WorkspaceKey);
-                PersonGroup newGroup = new PersonGroup { Name = this.personGroupNameTextBox.Text, PersonGroupId = personGroupGuid.ToString() };
+                await FaceServiceHelper.CreateLargePersonGroupAsync(personGroupGuid.ToString(), this.personGroupNameTextBox.Text, SettingsHelper.Instance.WorkspaceKey);
+                LargePersonGroup newGroup = new LargePersonGroup { Name = this.personGroupNameTextBox.Text, LargePersonGroupId = personGroupGuid.ToString() };
 
                 this.PersonGroups.Add(newGroup);
                 this.personGroupsListView.SelectedValue = newGroup;
@@ -154,7 +154,7 @@ namespace IntelligentKioskSample.Views
         {
             try
             {
-                await FaceServiceHelper.DeletePersonGroupAsync(this.CurrentPersonGroup.PersonGroupId);
+                await FaceServiceHelper.DeletePersonGroupAsync(this.CurrentPersonGroup.LargePersonGroupId);
                 this.PersonGroups.Remove(this.CurrentPersonGroup);
 
                 this.PersonsInCurrentGroup.Clear();
@@ -168,7 +168,7 @@ namespace IntelligentKioskSample.Views
 
         private async void OnGroupSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.CurrentPersonGroup = (PersonGroup)this.personGroupsListView.SelectedValue;
+            this.CurrentPersonGroup = (LargePersonGroup)this.personGroupsListView.SelectedValue;
 
             if (this.CurrentPersonGroup != null)
             {
@@ -199,7 +199,7 @@ namespace IntelligentKioskSample.Views
 
             try
             {
-                Person[] personsInGroup = await FaceServiceHelper.GetPersonsAsync(this.CurrentPersonGroup.PersonGroupId);
+                Person[] personsInGroup = await FaceServiceHelper.GetPersonsAsync(this.CurrentPersonGroup.LargePersonGroupId);
                 foreach (Person person in personsInGroup.OrderBy(p => p.Name))
                 {
                     this.PersonsInCurrentGroup.Add(person);
@@ -261,7 +261,7 @@ namespace IntelligentKioskSample.Views
         {
             try
             {
-                CreatePersonResult result = await FaceServiceHelper.CreatePersonAsync(this.CurrentPersonGroup.PersonGroupId, name);
+                CreatePersonResult result = await FaceServiceHelper.CreatePersonAsync(this.CurrentPersonGroup.LargePersonGroupId, name);
                 this.PersonsInCurrentGroup.Add(new Person { Name = name, PersonId = result.PersonId });
                 this.needsTraining = true;
                 this.DismissFlyout();
@@ -281,7 +281,7 @@ namespace IntelligentKioskSample.Views
         {
             try
             {
-                await FaceServiceHelper.DeletePersonAsync(this.CurrentPersonGroup.PersonGroupId, this.SelectedPerson.PersonId);
+                await FaceServiceHelper.DeletePersonAsync(this.CurrentPersonGroup.LargePersonGroupId, this.SelectedPerson.PersonId);
                 this.PersonsInCurrentGroup.Remove(this.SelectedPerson);
             }
             catch (Exception ex)
@@ -303,14 +303,14 @@ namespace IntelligentKioskSample.Views
 
             try
             {
-                Person latestVersionOfCurrentPerson = await FaceServiceHelper.GetPersonAsync(this.CurrentPersonGroup.PersonGroupId, this.SelectedPerson.PersonId);
+                Person latestVersionOfCurrentPerson = await FaceServiceHelper.GetPersonAsync(this.CurrentPersonGroup.LargePersonGroupId, this.SelectedPerson.PersonId);
                 this.SelectedPerson.PersistedFaceIds = latestVersionOfCurrentPerson.PersistedFaceIds;
 
                 if (this.SelectedPerson.PersistedFaceIds != null)
                 {
                     foreach (Guid face in this.SelectedPerson.PersistedFaceIds)
                     {
-                        PersistedFace personFace = await FaceServiceHelper.GetPersonFaceAsync(this.CurrentPersonGroup.PersonGroupId, this.SelectedPerson.PersonId, face);
+                        PersistedFace personFace = await FaceServiceHelper.GetPersonFaceAsync(this.CurrentPersonGroup.LargePersonGroupId, this.SelectedPerson.PersonId, face);
                         this.SelectedPersonFaces.Add(personFace);
                     }
                 }
@@ -344,7 +344,7 @@ namespace IntelligentKioskSample.Views
                     if (item.GetImageStreamCallback != null)
                     {
                         addResult = await FaceServiceHelper.AddPersonFaceAsync(
-                            this.CurrentPersonGroup.PersonGroupId,
+                            this.CurrentPersonGroup.LargePersonGroupId,
                             this.SelectedPerson.PersonId,
                             imageStreamCallback: item.GetImageStreamCallback,
                             userData: item.LocalImagePath,
@@ -353,7 +353,7 @@ namespace IntelligentKioskSample.Views
                     else
                     {
                         addResult = await FaceServiceHelper.AddPersonFaceAsync(
-                            this.CurrentPersonGroup.PersonGroupId,
+                            this.CurrentPersonGroup.LargePersonGroupId,
                             this.SelectedPerson.PersonId,
                             imageUrl: item.ImageUrl,
                             userData: item.ImageUrl,
@@ -393,7 +393,7 @@ namespace IntelligentKioskSample.Views
                 foreach (var item in this.selectedPersonFacesGridView.SelectedItems.ToArray())
                 {
                     PersistedFace personFace = (PersistedFace)item;
-                    await FaceServiceHelper.DeletePersonFaceAsync(this.CurrentPersonGroup.PersonGroupId, this.SelectedPerson.PersonId, personFace.PersistedFaceId);
+                    await FaceServiceHelper.DeletePersonFaceAsync(this.CurrentPersonGroup.LargePersonGroupId, this.SelectedPerson.PersonId, personFace.PersistedFaceId);
                     this.SelectedPersonFaces.Remove(personFace);
 
                     this.needsTraining = true;
@@ -459,7 +459,7 @@ namespace IntelligentKioskSample.Views
                         continue;
                     }
 
-                    CreatePersonResult newPersonResult = await FaceServiceHelper.CreatePersonAsync(this.CurrentPersonGroup.PersonGroupId, personName);
+                    CreatePersonResult newPersonResult = await FaceServiceHelper.CreatePersonAsync(this.CurrentPersonGroup.LargePersonGroupId, personName);
                     Person newPerson = new Person { Name = name, PersonId = newPersonResult.PersonId };
 
                     IEnumerable<string> faceUrls = await BingSearchHelper.GetImageSearchResults(string.Format("{0} {1} {2}", this.importImageSearchKeywordPrefix.Text, name, this.importImageSearchKeywordSufix.Text), count: 2);
@@ -473,7 +473,7 @@ namespace IntelligentKioskSample.Views
 
                             if (imageWithFace.DetectedFaces.Count() == 1)
                             {
-                                await FaceServiceHelper.AddPersonFaceAsync(this.CurrentPersonGroup.PersonGroupId, newPerson.PersonId, imageWithFace.ImageUrl, imageWithFace.ImageUrl, imageWithFace.DetectedFaces.First().FaceRectangle);
+                                await FaceServiceHelper.AddPersonFaceAsync(this.CurrentPersonGroup.LargePersonGroupId, newPerson.PersonId, imageWithFace.ImageUrl, imageWithFace.ImageUrl, imageWithFace.DetectedFaces.First().FaceRectangle);
                             }
                         }
                         catch (Exception)
@@ -547,7 +547,7 @@ namespace IntelligentKioskSample.Views
                         continue;
                     }
 
-                    CreatePersonResult newPersonResult = await FaceServiceHelper.CreatePersonAsync(this.CurrentPersonGroup.PersonGroupId, personName);
+                    CreatePersonResult newPersonResult = await FaceServiceHelper.CreatePersonAsync(this.CurrentPersonGroup.LargePersonGroupId, personName);
                     Person newPerson = new Person { Name = personName, PersonId = newPersonResult.PersonId };
 
                     foreach (var photoFile in await folder.GetFilesAsync())
@@ -555,7 +555,7 @@ namespace IntelligentKioskSample.Views
                         try
                         {
                             await FaceServiceHelper.AddPersonFaceAsync(
-                                this.CurrentPersonGroup.PersonGroupId,
+                                this.CurrentPersonGroup.LargePersonGroupId,
                                 newPerson.PersonId,
                                 imageStreamCallback: photoFile.OpenStreamForReadAsync,
                                 userData: photoFile.Path,
@@ -606,11 +606,11 @@ namespace IntelligentKioskSample.Views
             {
                 foreach (var group in this.PersonGroups)
                 {
-                    await FaceServiceHelper.TrainPersonGroupAsync(group.PersonGroupId);
+                    await FaceServiceHelper.TrainPersonGroupAsync(group.LargePersonGroupId);
 
                     while (true)
                     {
-                        TrainingStatus trainingStatus = await FaceServiceHelper.GetPersonGroupTrainingStatusAsync(group.PersonGroupId);
+                        TrainingStatus trainingStatus = await FaceServiceHelper.GetPersonGroupTrainingStatusAsync(group.LargePersonGroupId);
 
                         if (trainingStatus.Status != Status.Running)
                         {

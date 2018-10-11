@@ -272,10 +272,10 @@ namespace ServiceHelpersStandard
             {
                 List<IdentifiedPerson> result = new List<IdentifiedPerson>();
 
-                IEnumerable<PersonGroup> personGroups = Enumerable.Empty<PersonGroup>();
+                IEnumerable<LargePersonGroup> personGroups = Enumerable.Empty<LargePersonGroup>();
                 try
                 {
-                    personGroups = await FaceServiceHelper.GetPersonGroupsAsync(PeopleGroupsUserDataFilter);
+                    personGroups = await FaceServiceHelper.ListLargePersonGroupsAsync(PeopleGroupsUserDataFilter);
                 }
                 catch (Exception e)
                 {
@@ -291,7 +291,7 @@ namespace ServiceHelpersStandard
                 {
                     try
                     {
-                        IdentifyResult[] groupResults = await FaceServiceHelper.IdentifyAsync(group.PersonGroupId, detectedFaceIds);
+                        IdentifyResult[] groupResults = await FaceServiceHelper.IdentifyAsync(group.LargePersonGroupId, detectedFaceIds);
                         foreach (var match in groupResults)
                         {
                             if (!match.Candidates.Any())
@@ -299,7 +299,7 @@ namespace ServiceHelpersStandard
                                 continue;
                             }
 
-                            Person person = await FaceServiceHelper.GetPersonAsync(group.PersonGroupId, match.Candidates[0].PersonId);
+                            Person person = await FaceServiceHelper.GetPersonAsync(group.LargePersonGroupId, match.Candidates[0].PersonId);
 
                             IdentifiedPerson alreadyIdentifiedPerson = result.FirstOrDefault(p => p.Person.PersonId == match.Candidates[0].PersonId);
                             if (alreadyIdentifiedPerson != null)

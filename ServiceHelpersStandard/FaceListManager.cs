@@ -65,7 +65,7 @@ namespace ServiceHelpersStandard
                 IEnumerable<FaceListMetadata> metadata = await FaceServiceHelper.GetFaceListsAsync(FaceListsUserDataFilter);
                 foreach (var item in metadata)
                 {
-                    await FaceServiceHelper.DeleteFaceListAsync(item.FaceListId);
+                    await FaceServiceHelper.DeleteLargeFaceListAsync(item.FaceListId);
                 }
             }
             catch (Exception e)
@@ -155,7 +155,7 @@ namespace ServiceHelpersStandard
                 {
                     // We don't have any FaceLists yet. Create one
                     string newFaceListId = Guid.NewGuid().ToString();
-                    await FaceServiceHelper.CreateFaceListAsync(newFaceListId, "ManagedFaceList", FaceListsUserDataFilter);
+                    await FaceServiceHelper.CreateLargeFaceListAsync(newFaceListId, "ManagedFaceList", FaceListsUserDataFilter);
 
                     faceLists.Add(newFaceListId, new FaceListInfo { FaceListId = newFaceListId, LastMatchTimestamp = DateTime.Now });
                 }
@@ -202,12 +202,12 @@ namespace ServiceHelpersStandard
                         // delete oldest face list
                         var oldestFaceList = faceLists.OrderBy(fl => fl.Value.LastMatchTimestamp).FirstOrDefault();
                         faceLists.Remove(oldestFaceList.Key);
-                        await FaceServiceHelper.DeleteFaceListAsync(oldestFaceList.Key);
+                        await FaceServiceHelper.DeleteLargeFaceListAsync(oldestFaceList.Key);
                     }
 
                     // create new list
                     string newFaceListId = Guid.NewGuid().ToString();
-                    await FaceServiceHelper.CreateFaceListAsync(newFaceListId, "ManagedFaceList", FaceListsUserDataFilter);
+                    await FaceServiceHelper.CreateLargeFaceListAsync(newFaceListId, "ManagedFaceList", FaceListsUserDataFilter);
                     faceLists.Add(newFaceListId, new FaceListInfo { FaceListId = newFaceListId, LastMatchTimestamp = DateTime.Now });
 
                     // Add face to new list

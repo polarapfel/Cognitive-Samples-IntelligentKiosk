@@ -171,14 +171,14 @@ namespace ServiceHelpersStandard
             await RunTaskWithAutoRetryOnQuotaLimitExceededError<object>(async () => { await action(); return null; });
         }
 
-        public static async Task CreatePersonGroupAsync(string personGroupId, string name, string userData)
+        public static async Task CreateLargePersonGroupAsync(string personGroupId, string name, string userData)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.CreatePersonGroupAsync(personGroupId, name, userData));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.CreateLargePersonGroupAsync(personGroupId, name, userData));
         }
 
         public static async Task<Person[]> GetPersonsAsync(string personGroupId)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<Person[]>(() => faceClient.GetPersonsAsync(personGroupId));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<Person[]>(() => faceClient.ListPersonsInLargePersonGroupAsync(personGroupId));
         }
 
         public static async Task<Face[]> DetectAsync(Func<Task<Stream>> imageStreamCallback, bool returnFaceId = true, bool returnFaceLandmarks = false, IEnumerable<FaceAttributeType> returnFaceAttributes = null)
@@ -193,18 +193,18 @@ namespace ServiceHelpersStandard
 
         public static async Task<PersistedFace> GetPersonFaceAsync(string personGroupId, Guid personId, Guid face)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<PersistedFace>(() => faceClient.GetPersonFaceAsync(personGroupId, personId, face));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<PersistedFace>(() => faceClient.GetPersonFaceInLargePersonGroupAsync(personGroupId, personId, face));
         }
 
-        public static async Task<IEnumerable<PersonGroup>> GetPersonGroupsAsync(string userDataFilter = null)
+        public static async Task<IEnumerable<LargePersonGroup>> ListLargePersonGroupsAsync(string userDataFilter = null)
         {
-            return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<PersonGroup[]>(() => faceClient.GetPersonGroupsAsync())).Where(group => string.IsNullOrEmpty(userDataFilter) || string.Equals(group.UserData, userDataFilter));
+            return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<LargePersonGroup[]>(() => faceClient.ListLargePersonGroupsAsync())).Where(group => string.IsNullOrEmpty(userDataFilter) || string.Equals(group.UserData, userDataFilter));
         }
 
-        public static async Task<IEnumerable<PersonGroup>> ListPersonGroupsAsync(string userDataFilter = null)
-        {
-            return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<PersonGroup[]>(() => faceClient.ListPersonGroupsAsync())).Where(group => string.Equals(group.UserData, userDataFilter));
-        }
+        //public static async Task<IEnumerable<LargePersonGroup>> ListPersonGroupsAsync(string userDataFilter = null)
+        //{
+        //    return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<LargePersonGroup[]>(() => faceClient.ListLargePersonGroupsAsync())).Where(group => string.Equals(group.UserData, userDataFilter));
+        //}
 
         public static async Task<IEnumerable<FaceListMetadata>> GetFaceListsAsync(string userDataFilter = null)
         {
@@ -213,77 +213,77 @@ namespace ServiceHelpersStandard
 
         public static async Task<SimilarPersistedFace[]> FindSimilarAsync(Guid faceId, string faceListId, int maxNumOfCandidatesReturned = 1)
         {
-            return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<SimilarPersistedFace[]>(() => faceClient.FindSimilarAsync(faceId, faceListId, maxNumOfCandidatesReturned)));
+            return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<SimilarPersistedFace[]>(() => faceClient.FindSimilarAsync(faceId, null, faceListId, FindSimilarMatchMode.matchPerson, maxNumOfCandidatesReturned)));
         }
 
         public static async Task<AddPersistedFaceResult> AddFaceToFaceListAsync(string faceListId, Func<Task<Stream>> imageStreamCallback, FaceRectangle targetFace)
         {
-            return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<AddPersistedFaceResult>(async () => await faceClient.AddFaceToFaceListAsync(faceListId, await imageStreamCallback(), null, targetFace)));
+            return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<AddPersistedFaceResult>(async () => await faceClient.AddFaceToLargeFaceListAsync(faceListId, await imageStreamCallback(), null, targetFace)));
         }
 
-        public static async Task CreateFaceListAsync(string faceListId, string name, string userData)
+        public static async Task CreateLargeFaceListAsync(string faceListId, string name, string userData)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.CreateFaceListAsync(faceListId, name, userData));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.CreateLargeFaceListAsync(faceListId, name, userData));
         }
 
-        public static async Task DeleteFaceListAsync(string faceListId)
+        public static async Task DeleteLargeFaceListAsync(string faceListId)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeleteFaceListAsync(faceListId));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeleteLargeFaceListAsync(faceListId));
         }
 
-        public static async Task UpdatePersonGroupsAsync(string personGroupId, string name, string userData)
+        public static async Task UpdateLargePersonGroupsAsync(string personGroupId, string name, string userData)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.UpdatePersonGroupAsync(personGroupId, name, userData));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.UpdateLargePersonGroupAsync(personGroupId, name, userData));
         }
 
         public static async Task<AddPersistedFaceResult> AddPersonFaceAsync(string personGroupId, Guid personId, string imageUrl, string userData, FaceRectangle targetFace)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<AddPersistedFaceResult>(() => faceClient.AddPersonFaceAsync(personGroupId, personId, imageUrl, userData, targetFace));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<AddPersistedFaceResult>(() => faceClient.AddPersonFaceInLargePersonGroupAsync(personGroupId, personId, imageUrl, userData, targetFace));
         }
 
         public static async Task<AddPersistedFaceResult> AddPersonFaceAsync(string personGroupId, Guid personId, Func<Task<Stream>> imageStreamCallback, string userData, FaceRectangle targetFace)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<AddPersistedFaceResult>(async () => await faceClient.AddPersonFaceAsync(personGroupId, personId, await imageStreamCallback(), userData, targetFace));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<AddPersistedFaceResult>(async () => await faceClient.AddPersonFaceInLargePersonGroupAsync(personGroupId, personId, await imageStreamCallback(), userData, targetFace));
         }
 
         public static async Task<IdentifyResult[]> IdentifyAsync(string personGroupId, Guid[] detectedFaceIds)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<IdentifyResult[]>(() => faceClient.IdentifyAsync(personGroupId, detectedFaceIds));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<IdentifyResult[]>(() => faceClient.IdentifyAsync(detectedFaceIds, null, personGroupId, 0.5F, 1));
         }
 
         public static async Task DeletePersonAsync(string personGroupId, Guid personId)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeletePersonAsync(personGroupId, personId));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeletePersonFromLargePersonGroupAsync(personGroupId, personId));
         }
 
         public static async Task<CreatePersonResult> CreatePersonAsync(string personGroupId, string name)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<CreatePersonResult>(() => faceClient.CreatePersonAsync(personGroupId, name));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<CreatePersonResult>(() => faceClient.CreatePersonInLargePersonGroupAsync(personGroupId, name));
         }
 
         public static async Task<Person> GetPersonAsync(string personGroupId, Guid personId)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<Person>(() => faceClient.GetPersonAsync(personGroupId, personId));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<Person>(() => faceClient.GetPersonInLargePersonGroupAsync(personGroupId, personId));
         }
 
         public static async Task TrainPersonGroupAsync(string personGroupId)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.TrainPersonGroupAsync(personGroupId));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.TrainLargePersonGroupAsync(personGroupId));
         }
 
         public static async Task DeletePersonGroupAsync(string personGroupId)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeletePersonGroupAsync(personGroupId));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeleteLargePersonGroupAsync(personGroupId));
         }
 
         public static async Task DeletePersonFaceAsync(string personGroupId, Guid personId, Guid faceId)
         {
-            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeletePersonFaceAsync(personGroupId, personId, faceId));
+            await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeletePersonFaceFromLargePersonGroupAsync(personGroupId, personId, faceId));
         }
 
         public static async Task<TrainingStatus> GetPersonGroupTrainingStatusAsync(string personGroupId)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<TrainingStatus>(() => faceClient.GetPersonGroupTrainingStatusAsync(personGroupId));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<TrainingStatus>(() => faceClient.GetLargePersonGroupTrainingStatusAsync(personGroupId));
         }
     }
 }
