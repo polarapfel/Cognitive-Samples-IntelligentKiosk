@@ -481,7 +481,7 @@
       <Version>2.2.0-preview</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.0-preview1-26926-04</Version>
+      <Version>6.1.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.ProjectOxford.Face">
       <Version>1.4.0</Version>
